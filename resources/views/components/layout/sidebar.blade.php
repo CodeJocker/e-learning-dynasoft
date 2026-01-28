@@ -1,5 +1,5 @@
 @php
-    $role = session('mock_role', 'instructor');
+    $role = session('mock_role', 'admin');
     $links = [];
 
     if ($role === 'admin') {

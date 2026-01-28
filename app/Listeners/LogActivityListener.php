@@ -1,15 +1,14 @@
 <?php
 
 namespace App\Listeners;
-
-use App\Events\UserRegistered;
 use App\Models\ActivityLog;
 use App\Models\User;
+use App\Events\UserRegistered;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
-use Spatie\Activitylog\Facades\Activity;
 
-class LogUserRegistration implements ShouldQueue
+class LogActivityListener
 {
     /**
      * Create the event listener.
@@ -19,11 +18,13 @@ class LogUserRegistration implements ShouldQueue
         //
     }
 
-    /**
-     * Handle the event.
-     */
-    public function handle(UserRegistered $event): void
-    {
+    public function logUserRegistered(UserRegistered $event){
+        Log::info('User registered: ', [
+            'user_id' => $event->user->id,
+            'email' => $event->user->email,
+            'name' => $event->user->name,
+        ]);
+
         ActivityLog::create([
             'action' => 'user_registered',
             'actor_type' => User::class,
@@ -35,5 +36,19 @@ class LogUserRegistration implements ShouldQueue
                 'registered_at' => now(),
             ],
         ]);
+
+
+    }
+
+    /**
+     * Handle the event.
+     */
+
+    public function subscribe($events)
+    {
+        $events->listen(
+            UserRegistered::class,
+            [LogActivityListener::class, 'logUserRegistered']
+        );
     }
 }
