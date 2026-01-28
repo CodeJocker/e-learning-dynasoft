@@ -3,12 +3,11 @@
         <button @click="toggleSidebar()" class="p-2 text-secondary rounded-lg hover:surface-muted hover:text-primary focus:outline-none transition-colors">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
         </button>
-        
+
         <div class="hidden sm:flex items-center text-sm breadcrumbs text-secondary">
             <span class="opacity-70">Pages</span> <span class="mx-2">/</span> <span class="font-medium text-primary">Dashboard</span>
         </div>
 
-        <!-- Search Bar (Desktop) -->
         <div class="hidden lg:flex items-center ml-4 relative max-w-md w-full">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 @svg('heroicon-o-magnifying-glass', 'w-5 h-5 text-secondary')
@@ -18,7 +17,7 @@
     </div>
 
     <!-- Mobile Search Overlay (Takes Full Width) -->
-    <div x-show="searchMobileOpen" 
+    <div x-show="searchMobileOpen"
          x-cloak
          x-transition:enter="transition ease-out duration-200"
          x-transition:enter-start="opacity-0 -translate-y-2"
@@ -27,7 +26,7 @@
          x-transition:leave-start="opacity-100 translate-y-0"
          x-transition:leave-end="opacity-0 -translate-y-2"
          class="absolute inset-x-0 top-0 bottom-0 px-4 bg-white surface-card border-b border-subtle z-50 flex items-center gap-3 lg:hidden h-full">
-         
+
          <div class="relative flex-1">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 @svg('heroicon-o-magnifying-glass', 'w-5 h-5 text-secondary')
