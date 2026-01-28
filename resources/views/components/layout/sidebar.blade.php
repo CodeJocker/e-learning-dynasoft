@@ -26,10 +26,6 @@
     }
 @endphp
 
-<!--
-  Mobile: Fixed, Overlay (z-50), Transform Translate.
-  Desktop: Static, Flex Item (Pushes content), Negative Margin to hide (shrinks space).
--->
 <aside class="fixed inset-y-0 left-0 z-50 w-64 h-full px-5 py-8 overflow-y-auto surface-card border-r border-subtle transition-all duration-300 transform -translate-x-full lg:static lg:transform-none lg:z-auto"
        :class="{
            'translate-x-0': sidebarOpen && isMobile,
@@ -44,7 +40,6 @@
             </div>
             <span>E-Learn</span>
         </a>
-        <!-- Close button for mobile -->
         <button @click="sidebarOpen = false" class="lg:hidden text-secondary hover:text-primary">
             @svg('heroicon-o-x-mark', 'w-6 h-6')
         </button>
