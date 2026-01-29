@@ -12,7 +12,6 @@ class CourseCategory extends Model
 
     protected $fillable = [
         'name',
-        'slug',
         'icon',
         'description',
         'display_order',
@@ -23,7 +22,6 @@ class CourseCategory extends Model
         'is_active' => 'boolean',
     ];
 
-    
     public function courses()
     {
         return $this->hasMany(Course::class);
@@ -55,7 +53,7 @@ class CourseCategory extends Model
 
     public function getIconUrlAttribute(): ?string
     {
-        if (!$this->icon) {
+        if (! $this->icon) {
             return null;
         }
 
@@ -65,6 +63,6 @@ class CourseCategory extends Model
         }
 
         // or if you store real image paths
-        return asset('storage/' . $this->icon);
+        return asset('storage/'.$this->icon);
     }
 }
