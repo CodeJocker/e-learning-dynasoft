@@ -1,9 +1,5 @@
 @php
-<<<<<<< HEAD
     $role = session('mock_role', 'student');
-=======
-    $role = session('mock_role', 'admin');
->>>>>>> a7bd5af8be71e6a4a5b96451e382acd55905636f
     $links = [];
 
     if ($role === 'admin') {
