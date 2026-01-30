@@ -1,7 +1,7 @@
 @extends('layouts.auth._base-auth')
 
 @section('page-title', 'My Learning')
-
+@yield('content');
 @section('sidebar')
     <x-ui.sidebar-link href="{{ route('student.dashboard') ?? '#' }}" active icon="chart-bar">Dashboard</x-ui.sidebar-link>
     <x-ui.sidebar-link href="{{ route('student.courses') ?? '#' }}" icon="book-open">My Courses</x-ui.sidebar-link>
