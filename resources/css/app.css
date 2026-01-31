@@ -6,8 +6,8 @@
 @source '../**/*.js';
 
 :root {
-  --font-sans: 'Comfortaa', ui-sans-serif, system-ui, sans-serif,
-    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  font-family: 'Roboto', sans-serif;
+
 
   --bg-primary: #f8fafc;
   --bg-secondary: #ffffff;
@@ -29,7 +29,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not(.light) {
     --bg-primary: #020617;
     --bg-secondary: #020617;
 
@@ -46,30 +46,108 @@
   }
 }
 
+.dark {
+  --bg-primary: #020617;
+  --bg-secondary: #020617;
+
+  --text-primary: #e5e7eb;
+  --text-secondary: #94a3b8;
+
+  --border-subtle: #1e293b;
+
+  --accent-primary: #22c55e;
+  --accent-secondary: #facc15;
+
+  --surface-card: #020617;
+  --surface-muted: #020617;
+}
+
 
 @layer utilities {
-  .bg-primary { background-color: var(--bg-primary); }
-  .bg-secondary { background-color: var(--bg-secondary); }
+  .bg-primary {
+    background-color: var(--bg-primary);
+  }
 
-  .text-primary { color: var(--text-primary); }
-  .text-secondary { color: var(--text-secondary); }
+  .bg-secondary {
+    background-color: var(--bg-secondary);
+  }
 
-  .border-subtle { border-color: var(--border-subtle); }
+  .text-primary {
+    color: var(--text-primary);
+  }
 
-  .bg-accent { background-color: var(--accent-primary); }
-  .text-accent { color: var(--accent-primary); }
+  .text-secondary {
+    color: var(--text-secondary);
+  }
 
-  .bg-accent-secondary { background-color: var(--accent-secondary); }
-  .text-accent-secondary { color: var(--accent-secondary); }
+  .border-subtle {
+    border-color: var(--border-subtle);
+  }
 
-  .text-success { color: var(--success); }
-  .text-warning { color: var(--warning); }
-  .text-error { color: var(--error); }
+  .bg-accent {
+    background-color: var(--accent-primary);
+  }
 
-  .bg-success { background-color: var(--success); }
-  .bg-warning { background-color: var(--warning); }
-  .bg-error { background-color: var(--error); }
+  .text-accent {
+    color: var(--accent-primary);
+  }
 
-  .surface-card { background-color: var(--surface-card); }
-  .surface-muted { background-color: var(--surface-muted); }
+  .bg-accent-secondary {
+    background-color: var(--accent-secondary);
+  }
+
+  .text-accent-secondary {
+    color: var(--accent-secondary);
+  }
+
+  .text-success {
+    color: var(--success);
+  }
+
+  .text-warning {
+    color: var(--warning);
+  }
+
+  .text-error {
+    color: var(--error);
+  }
+
+  .bg-success {
+    background-color: var(--success);
+  }
+
+  .bg-warning {
+    background-color: var(--warning);
+  }
+
+  .bg-error {
+    background-color: var(--error);
+  }
+
+  .surface-card {
+    background-color: var(--surface-card);
+  }
+
+  .surface-muted {
+    background-color: var(--surface-muted);
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
 }

@@ -4,10 +4,10 @@
 
     if ($role === 'admin') {
         $links = [
-             ['label' => 'Overview', 'icon' => 'chart-bar', 'url' => '#'],
+             ['label' => 'Overview', 'icon' => 'chart-bar', 'url' => '/'],
              ['label' => 'Users', 'icon' => 'users', 'url' => '#'],
-             ['label' => 'Courses', 'icon' => 'book-open', 'url' => '#'],
-             ['label' => 'System Logs', 'icon' => 'clipboard-document-list', 'url' => '#'],
+             ['label' => 'Activity Logs', 'icon' => 'clipboard-document-list', 'url' => '#'],
+             ['label' => 'System Notifications', 'icon' => 'bell', 'url' => '#'],
         ];
     } elseif ($role === 'instructor') {
          $links = [

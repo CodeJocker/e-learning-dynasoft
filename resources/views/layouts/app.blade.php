@@ -8,7 +8,7 @@
     <title>{{ config('app.name', 'E-learn') }}</title>
 
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
@@ -27,8 +27,28 @@
         searchOpen: false,
         chatbotOpen: false,
         isMobile: window.innerWidth < 1024,
+        darkMode: localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches),
 
         init() {
+            this.$watch('darkMode', val => {
+                localStorage.setItem('theme', val ? 'dark' : 'light');
+                if (val) {
+                    document.documentElement.classList.add('dark');
+                    document.documentElement.classList.remove('light');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    document.documentElement.classList.add('light');
+                }
+            });
+
+            if (this.darkMode) {
+                document.documentElement.classList.add('dark');
+                document.documentElement.classList.remove('light');
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.documentElement.classList.add('light');
+            }
+
             window.addEventListener('resize', () => {
                 this.isMobile = window.innerWidth < 1024;
                 if (!this.isMobile) {
@@ -38,6 +58,10 @@
                     this.sidebarOpen = false;
                 }
             });
+        },
+
+        toggleTheme() {
+            this.darkMode = !this.darkMode;
         },
 
         toggleSidebar() {
@@ -70,7 +94,7 @@
 
         toggleChatbot() {
             if (this.isMobile) {
-                window.location.href = '/chatbot';
+                window.location.href = '{{ route("chatbot") }}';
             } else {
                 this.chatbotOpen = !this.chatbotOpen;
                 if (this.chatbotOpen) {
@@ -93,7 +117,11 @@
     ></div>
 
     <!-- Sidebar -->
-    <x-layout.sidebar />
+    @if (isset($sidebar))
+        {{ $sidebar }}
+    @else
+        <x-layout.sidebar />
+    @endif
 
     <!-- Main content -->
     <div
@@ -145,12 +173,8 @@
             trigger="notificationOpen"
             @close="notificationOpen = false"
         >
-            <div class="h-full flex flex-col items-center justify-center p-6 text-center text-secondary opacity-70">
-                <div class="w-16 h-16 bg-surface-muted rounded-full flex items-center justify-center mb-4">
-                    @svg('heroicon-o-bell-slash', 'w-8 h-8 text-secondary')
-                </div>
-                <h4 class="text-base font-medium text-primary">No new notifications</h4>
-                <p class="text-sm mt-1">We'll let you know when something arrives.</p>
+            <div class="p-4 h-full overflow-y-auto custom-scrollbar">
+                @livewire('notifications')
             </div>
         </x-layout.right-panel>
 
@@ -174,11 +198,14 @@
             @close="chatbotOpen = false"
         >
             <div class="h-full flex flex-col items-center justify-center p-6 text-center text-secondary opacity-70">
-                <div class="w-16 h-16 bg-surface-muted rounded-full flex items-center justify-center mb-4">
+                <div class="w-16 h-16 surface-muted rounded-full flex items-center justify-center mb-4">
                     @svg('heroicon-o-chat-bubble-left-right', 'w-8 h-8 text-secondary')
                 </div>
                 <h4 class="text-base font-medium text-primary">How can I help?</h4>
-                <p class="text-sm mt-1">Ask me anything about your courses or the platform.</p>
+                <p class="text-sm mt-1 mb-4">Ask me anything about your courses or the platform.</p>
+                <a href="{{ route('chatbot') }}" class="text-sm font-medium text-accent hover:text-accent-secondary">
+                    Open Full Chat
+                </a>
             </div>
         </x-layout.right-panel>
 

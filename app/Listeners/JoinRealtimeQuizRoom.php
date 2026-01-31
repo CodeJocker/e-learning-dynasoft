@@ -6,7 +6,7 @@ use App\Events\QuizStarted;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class joinRealtimeQuizRoom
+class JoinRealtimeQuizRoom
 {
     /**
      * Create the event listener.
