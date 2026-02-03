@@ -11,8 +11,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // Essential: Register your 'admin' alias here
-        $middleware->alias([
+$middleware->redirectTo(
+        guests: '/admin/login' // This replaces the search for the 'login' route
+    );
+            $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
         ]);
     })
