@@ -57,15 +57,76 @@
         <div class="h-8 w-px bg-subtle mx-1 sm:mx-2 border-r border-subtle"></div>
 
         <!-- Profile Dropdown -->
-        <div class="flex items-center gap-3">
-            <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-tr from-accent to-accent-secondary p-[2px] cursor-pointer">
-                <div class="w-full h-full rounded-full surface-card p-[2px]">
-                     <img src="https://ui-avatars.com/api/?name={{ session('mock_role', 'John Doe') }}&background=0D8ABC&color=fff" alt="User" class="w-full h-full rounded-full object-cover">
+        <!-- Profile Dropdown -->
+        <div class="relative" x-data="{ profileOpen: false }" @click.outside="profileOpen = false">
+            <button @click="profileOpen = !profileOpen" class="flex items-center gap-3 focus:outline-none group">
+                <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-tr from-accent to-accent-secondary p-[2px] transition-transform group-hover:scale-105">
+                    <div class="w-full h-full rounded-full surface-card p-[2px]">
+                         <img src="https://ui-avatars.com/api/?name={{ session('mock_role', 'Admin+User') }}&background=0D8ABC&color=fff" alt="User" class="w-full h-full rounded-full object-cover">
+                    </div>
                 </div>
-            </div>
-            <div class="hidden md:block">
-                <p class="text-sm font-semibold text-primary">{{ ucfirst(session('mock_role', 'Student')) }}</p>
-                <p class="text-xs text-secondary">User</p>
+                <div class="hidden md:block text-left">
+                    <p class="text-sm font-semibold text-primary group-hover:text-accent transition-colors">{{ ucfirst(session('mock_role', 'Admin User')) }}</p>
+                    <p class="text-xs text-secondary">Administrator</p>
+                </div>
+                <div class="hidden md:block text-secondary group-hover:text-primary transition-colors">
+                    @svg('heroicon-m-chevron-down', 'w-4 h-4')
+                </div>
+            </button>
+
+            <!-- Dropdown Menu -->
+            <div 
+                x-show="profileOpen"
+                x-cloak
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 scale-95"
+                x-transition:enter-end="opacity-100 scale-100"
+                x-transition:leave="transition ease-in duration-75"
+                x-transition:leave-start="opacity-100 scale-100"
+                x-transition:leave-end="opacity-0 scale-95"
+                @click.stop
+                class="absolute right-0 mt-2 w-64 surface-card rounded-xl shadow-lg border border-subtle py-2 ring-1 ring-black ring-opacity-5 focus:outline-none z-50 origin-top-right"
+            >
+                <!-- Quick Info -->
+                <div class="px-4 py-3 border-b border-subtle mb-2">
+                    <p class="text-sm font-semibold text-primary">Admin User</p>
+                    <p class="text-xs text-secondary truncate">admin@dynasoft.rw</p>
+                    <div class="mt-2 flex items-center">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-success/10 text-success">
+                            Online
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Links -->
+                <a href="#" class="block px-4 py-2 text-sm text-secondary hover:surface-muted hover:text-primary transition-colors">
+                    @svg('heroicon-o-user-circle', 'w-4 h-4 inline mr-2')
+                    Profile Settings
+                </a>
+                
+                <!-- Dark Mode Toggle -->
+                <button @click="toggleTheme()" class="w-full text-left px-4 py-2 text-sm text-secondary hover:surface-muted hover:text-primary transition-colors flex items-center justify-between">
+                    <span class="flex items-center">
+                        @svg('heroicon-o-moon', 'w-4 h-4 inline mr-2')
+                        Dark Mode
+                    </span>
+                    <!-- Toggle Switch -->
+                    <div class="relative inline-flex h-5 w-9 items-center rounded-full transition-colors duration-200 focus:outline-none" :class="darkMode ? 'bg-accent' : 'bg-surface-muted border border-subtle'">
+                        <span class="inline-block h-3 w-3 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out" :class="darkMode ? 'translate-x-5' : 'translate-x-1'"></span>
+                    </div>
+                </button>
+
+                <!-- Divder -->
+                <div class="border-t border-subtle my-2"></div>
+
+                <!-- Logout -->
+                 <form method="POST" action="">
+                    @csrf
+                    <button type="submit" class="w-full text-left px-4 py-2 text-sm text-error hover:bg-error/10 transition-colors flex items-center">
+                        @svg('heroicon-o-arrow-left-on-rectangle', 'w-4 h-4 inline mr-2')
+                        Sign Out
+                    </button>
+                </form>
             </div>
         </div>
     </div>

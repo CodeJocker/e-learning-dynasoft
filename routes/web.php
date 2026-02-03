@@ -3,10 +3,6 @@
 use App\Http\Controllers\LessonController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('admin.dashboard');
-});
-
 Route::prefix('instructor')->name('instructor.')->group(function () {
     // No middleware for testing (you can add back later: auth, role:instructor)
 
@@ -28,3 +24,7 @@ Route::prefix('instructor')->name('instructor.')->group(function () {
     Route::delete('courses/{course}/lessons/{lesson}', [LessonController::class, 'destroy'])
         ->name('lessons.destroy');
 });
+use App\Http\Controllers\AdminController;
+
+Route::get('/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+Route::view('/chatbot', 'chatbot')->name('chatbot');
