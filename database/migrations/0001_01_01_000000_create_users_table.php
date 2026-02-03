@@ -22,6 +22,7 @@ return new class extends Migration
 
             // Verification
             $table->timestamp('email_verified_at')->nullable();
+            // $table->string('otp') ->unique() ->nullable() ->index(); 
 
             // Auth
             $table->string('password');

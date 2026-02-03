@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Student\Auth;
+namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -12,7 +12,7 @@ class VerificationController extends Controller
 {
     public function showVerifyForm($email)
     {
-        return view('student.auth.verify-otp', ['email' => $email]);
+        return view('student.auth.verify_otp', ['email' => $email]);
     }
 
     public function verify(Request $request)
