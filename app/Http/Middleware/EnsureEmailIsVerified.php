@@ -12,11 +12,9 @@ class EnsureEmailIsVerified
     {
         $user = auth()->user();
 
+        // If user is not verified, redirect to verification notice
         if ($user && !$user->is_verified) {
-            $email = $user->email;
-            auth()->logout();
-            return redirect()->route('student.otp.verify', ['email' => $email])
-                             ->with('error', 'Please verify your email first.');
+            return redirect()->route('verification.notice');
         }
 
         return $next($request);

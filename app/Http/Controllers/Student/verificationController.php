@@ -25,6 +25,7 @@ class VerificationController extends Controller
         $user = User::where('email', $request->email)
                     ->where('otp', $request->otp)
                     ->first();
+                    dd($user);
 
         if (!$user) {
             return back()->with('error', 'Invalid OTP code.');
@@ -32,6 +33,7 @@ class VerificationController extends Controller
 
         $user->update([
             'is_verified' => true,
+            'email_verified_at' => now(), 
             'otp' => null
         ]);
 

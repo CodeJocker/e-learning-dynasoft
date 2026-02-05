@@ -15,6 +15,7 @@
         "vite": "^7.0.7"
     },
     "dependencies": {
+        "@rollup/rollup-linux-x64-gnu": "^4.57.1",
         "laravel-echo": "^2.3.0",
         "pusher-js": "^8.4.0"
     }

@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // Essential: Register your 'admin' alias here
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
+            'student' => \App\Http\Middleware\StudentMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

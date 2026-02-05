@@ -17,16 +17,26 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 /* Landing page → redirect to registration */
 Route::get('/', fn() => redirect()->route('student.register'));
 
+// Global login route for middleware redirects (resolves `route('login')`)
+Route::get('/login', fn() => redirect()->route('student.login'))->name('login');
+
+// Global verification notice used by the `verified` middleware
+Route::get('/email/verify', function () {
+    $user = auth()->user();
+    if (!$user) return redirect()->route('login');
+    return view('student.auth.verify_otp', ['email' => $user->email]);
+})->middleware('auth')->name('verification.notice');
+
 // ============== STUDENT ROUTES ==============
 Route::prefix('student')->name('student.')->group(function () {
 
-    // Route::middleware('guest')->group(function () {
+    Route::middleware('guest')->group(function () {
         Route::get('/login', [LoginController::class,'showLoginForm'])->name('login');
         Route::post('/login', [LoginController::class,'login'])->name('login.submit');
 
         Route::get('/register', [RegisterController::class,'showRegistrationForm'])->name('register');
         Route::post('/register', [RegisterController::class,'register'])->name('register.submit');
-    // });
+    });
 
     Route::get('/verify-otp/{email}', [VerificationController::class,'showVerifyForm'])->name('otp.verify');
     Route::post('/verify-otp', [VerificationController::class,'verify'])->name('otp.submit');
@@ -82,5 +92,4 @@ Route::prefix('admin')->name('admin.')->group(function () {
     });
 });
 
-Auth::route();
 
