@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Student\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class LoginController extends Controller
 {
     public function showLoginForm()
     {
-        return view('student.auth.login');
+        return view('auth.login');
     }
 
     public function login(Request $request)
@@ -20,27 +21,23 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            $request->session()->regenerate();
+        // Attempt authentication with student guard
+        if (Auth::guard('student')->attempt($request->only('email', 'password'))) {
+            $user = Auth::guard('student')->user();
 
-            if (!auth()->user()->is_verified) {
-                $email = auth()->user()->email;
-                auth()->logout();
-                return redirect()->route('student.otp.verify', ['email' => $email])
-                                 ->with('error', 'Please verify your email first.');
+            // Check if email is verified
+            if (!$user->is_verified) {
+                Auth::guard('student')->logout();
+                return redirect()->route('student.showVerifyForm', ['email' => $user->email])
+                                 ->with('error', 'Please verify your email first. Check your inbox for the OTP code.');
             }
 
+            $request->session()->regenerate();
             return redirect()->route('student.dashboard');
         }
 
-        return back()->withErrors(['email' => 'Invalid credentials'])->onlyInput('email');
-    }
-
-    public function studentLogout(Request $request)
-    {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        return redirect()->route('student.login')->with('success', 'Logged out successfully.');
+        return back()->withErrors([
+            'email' => 'Invalid credentials.',
+        ])->onlyInput('email');
     }
 }

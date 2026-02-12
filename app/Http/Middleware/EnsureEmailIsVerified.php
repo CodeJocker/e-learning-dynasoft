@@ -10,12 +10,12 @@ class EnsureEmailIsVerified
 {
     public function handle(Request $request, Closure $next): Response
     {
-        $user = auth()->user();
+        $user = auth('student')->user();
 
         if ($user && !$user->is_verified) {
             $email = $user->email;
-            auth()->logout();
-            return redirect()->route('student.otp.verify', ['email' => $email])
+            auth('student')->logout();
+            return redirect()->route('student.showVerifyForm', ['email' => $email])
                              ->with('error', 'Please verify your email first.');
         }
 
