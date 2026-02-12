@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Student\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Profile;
+use App\Mail\OTPMail;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\OTPMail;
 use Carbon\Carbon;
 
 class RegisterController extends Controller
@@ -30,18 +31,30 @@ class RegisterController extends Controller
 
         $user = User::create([
             'name' => $request->name,
+            'username' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'is_verified' => false,
-            'otp' => $otp,
-            'otp_expires_at' => Carbon::now()->addMinutes(10),
+            'role' => 'student',
         ]);
 
-        // Send OTP email
-        Mail::to($user->email)->send(new OTPMail($otp));
+        // Create profile for the user
+        Profile::create([
+            'user_id' => $user->id,
+            'bio' => null,
+            'skills' => [],
+            'privacy_setting' => 'public',
+        ]);
 
-        // Redirect to OTP verification page
-        return redirect()->route('student.showVerifyForm', ['email' => $user->email])
-                         ->with('success', 'Registration successful! Please check your email for the OTP verification code.');
+        try {
+            Mail::to($user->email)->send(new OTPMail($otp));
+        } catch (\Exception $e) {
+            // Log mail error but don't fail registration
+            \Log::error('OTP Mail Error: ' . $e->getMessage());
+        }
+
+        return redirect()->route('student.otp.verify', ['email' => $user->email])
+                         ->with('success', 'Account created! OTP sent to your email.');
     }
 }
+

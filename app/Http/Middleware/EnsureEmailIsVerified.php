@@ -12,6 +12,7 @@ class EnsureEmailIsVerified
     {
         $user = auth('student')->user();
 
+        // If user is not verified, redirect to verification notice
         if ($user && !$user->is_verified) {
             $email = $user->email;
             auth('student')->logout();
