@@ -14,7 +14,6 @@ use App\Http\Controllers\Instructor\DashboardController as InstructorDashboardCo
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 
-/* Landing page → redirect to registration */
 Route::get('/', fn() => redirect()->route('student.register'));
 
 // Global login route for middleware redirects (resolves `route('login')`)
@@ -30,19 +29,21 @@ Route::get('/email/verify', function () {
 // ============== STUDENT ROUTES ==============
 Route::prefix('student')->name('student.')->group(function () {
 
-    Route::middleware('guest')->group(function () {
-        Route::get('/login', [LoginController::class,'showLoginForm'])->name('login');
-        Route::post('/login', [LoginController::class,'login'])->name('login.submit');
+    // Guest routes (student guard)
+    Route::middleware('guest:student')->group(function () {
+        Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+        Route::post('/register', [RegisterController::class, 'register'])->name('register.submit');
 
-        Route::get('/register', [RegisterController::class,'showRegistrationForm'])->name('register');
-        Route::post('/register', [RegisterController::class,'register'])->name('register.submit');
+        Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+        Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
     });
 
-    Route::get('/verify-otp/{email}', [VerificationController::class,'showVerifyForm'])->name('otp.verify');
-    Route::post('/verify-otp', [VerificationController::class,'verify'])->name('otp.submit');
-    Route::get('/resend-otp/{email}', [VerificationController::class,'resendOtp'])->name('otp.resend');
+    // OTP Verification (accessible without auth - user just registered)
+    Route::get('/verify/{email}', [VerificationController::class, 'showVerifyForm'])->name('showVerifyForm');
+    Route::post('/verify-otp', [VerificationController::class, 'verify'])->name('otp.submit');
+    Route::post('/resend-otp', [VerificationController::class, 'resendOtp'])->name('otp.resend');
 
-    Route::middleware(['auth', 'verified', 'student'])->group(function () {
+    Route::middleware(['auth:student', 'verified'])->group(function () {
         Route::get('/dashboard', [StudentDashboardController::class, 'index'])->name('dashboard');
         Route::post('/logout', [LogoutController::class,'studentLogout'])->name('logout');
         

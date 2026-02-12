@@ -10,11 +10,14 @@ class EnsureEmailIsVerified
 {
     public function handle(Request $request, Closure $next): Response
     {
-        $user = auth()->user();
+        $user = auth('student')->user();
 
         // If user is not verified, redirect to verification notice
         if ($user && !$user->is_verified) {
-            return redirect()->route('verification.notice');
+            $email = $user->email;
+            auth('student')->logout();
+            return redirect()->route('student.showVerifyForm', ['email' => $email])
+                             ->with('error', 'Please verify your email first.');
         }
 
         return $next($request);

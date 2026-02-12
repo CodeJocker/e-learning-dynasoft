@@ -17,6 +17,7 @@ return new class extends Migration
             // Basic info
             $table->string('name');
             $table->string('username')->nullable()->unique();
+            $table->boolean('is_actived')->default(0);
             $table->string('email')->unique();
             $table->string('phone')->nullable();
 
