@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Student\Profile;
 
+use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -12,7 +13,7 @@ class ProfileController extends Controller
 {
     public function show(User $user)
     {
-        $this->authorize('view', $user);
+        Gate::authorize('view', $user);
         return view('student.profile.show', ['user' => $user]);
     }
 
@@ -25,7 +26,7 @@ class ProfileController extends Controller
     public function update(Request $request)
     {
         $user = Auth::user();
-        $this->authorize('update', $user);
+        Gate::authorize('update', $user);
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
