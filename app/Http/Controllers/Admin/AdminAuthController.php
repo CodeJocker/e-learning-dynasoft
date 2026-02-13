@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
@@ -20,25 +21,30 @@ class AdminAuthController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
+            // Check if the user is an admin or instructor to decide where to send them
+            $user = Auth::user();
+            
+            $request->session()->regenerate();
 
-            if (Auth::user()->role !== 'admin') {
-                Auth::logout();
-                return back()->withErrors([
-                    'email' => 'Unauthorized access'
-                ]);
+            if ($user->role === 'admin') {
+                return redirect()->route('admin.dashboard');
+            } elseif ($user->role === 'instructor') {
+                return redirect()->route('instructor.dashboard');
             }
 
-            return redirect()->route('admin.dashboard');
+            // If neither, log them out
+            Auth::logout();
+            return back()->withErrors(['email' => 'Unauthorized role.']);
         }
 
-        return back()->withErrors([
-            'email' => 'Invalid credentials'
-        ]);
+        return back()->withErrors(['email' => 'Invalid credentials']);
     }
 
-    public function logout()
-    {
-        Auth::logout();
-        return redirect()->route('admin.login');
-    }
+  public function logout(Request $request)
+{
+    Auth::logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+    return redirect()->route('admin.login'); // Essential return
+}
 }

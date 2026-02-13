@@ -17,37 +17,37 @@ return new class extends Migration
             // Basic info
             $table->string('name');
             $table->string('username')->nullable()->unique();
-            $table->boolean('is_actived')->default(0);
             $table->string('email')->unique();
             $table->string('phone')->nullable();
 
-            // Verification
+            // Verification & Status
             $table->timestamp('email_verified_at')->nullable();
-            // $table->string('otp') ->unique() ->nullable() ->index(); 
+            $table->string('otp')->nullable()->index(); // Uncommented for your OTP logic
+            $table->boolean('is_verified')->default(false); // Added to match your controller checks
+            $table->boolean('is_active')->default(true);
 
             // Auth
             $table->string('password');
             $table->rememberToken();
 
-            // Role & status
-            $table->enum('role', ['user', 'admin'])->default('user');
-            $table->boolean('is_active')->default(true);
+            // Role - Added 'instructor' to fix the "Data truncated" error
+            $table->enum('role', ['student', 'admin', 'instructor'])->default('student');
 
-            // Profile
+            // Profile fields
             $table->string('avatar')->nullable();
             $table->text('bio')->nullable();
 
             $table->timestamps();
         });
 
-        // Password reset tokens
+        // Password reset tokens table
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
 
-        // Sessions
+        // Sessions table
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
