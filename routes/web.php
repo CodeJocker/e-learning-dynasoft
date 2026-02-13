@@ -44,7 +44,7 @@ Route::view("/chatbot", "chatbot")->name("chatbot");
 Route::get('/email/verify', function () {
     $user = auth()->user();
     if (!$user) return redirect()->route('login');
-    return view('auth.verify_otp', ['email' => $user->email]);
+    return view('student.auth.verify_otp', ['email' => $user->email]);
 })->middleware('auth')->name('verification.notice');
 
 /*
