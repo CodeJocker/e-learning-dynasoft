@@ -12,7 +12,7 @@ class VerificationController extends Controller
 {
     public function showVerifyForm($email)
     {
-        return view('student.auth.verify_otp', ['email' => $email]);
+        return view('auth.verify_otp', ['email' => $email]);
     }
 
     public function verify(Request $request)

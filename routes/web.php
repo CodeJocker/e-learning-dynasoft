@@ -23,7 +23,7 @@ Route::get('/login', fn() => redirect()->route('student.login'))->name('login');
 Route::get('/email/verify', function () {
     $user = auth()->user();
     if (!$user) return redirect()->route('login');
-    return view('student.auth.verify_otp', ['email' => $user->email]);
+    return view('auth.verify_otp', ['email' => $user->email]);
 })->middleware('auth')->name('verification.notice');
 
 // ============== STUDENT ROUTES ==============
