@@ -8,35 +8,29 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('certificates', function (Blueprint $table) {
-            $table->id();
+    Schema::create('certificates', function (Blueprint $table) {
+        $table->id();
+        $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+        $table->foreignId('course_id')->constrained('courses')->onDelete('cascade');
 
-            $table->foreignId('user_id')
-                ->constrained('users')
-                ->onDelete('cascade');                    // student who earned it
+        // Change the culprit line to this:
+        $table->unsignedBigInteger('course_progress_id')->nullable();
+        
+        $table->string('certificate_code', 50)->unique();
+        $table->timestamp('issued_at')->useCurrent();
+        $table->string('pdf_path')->nullable();
+        $table->string('verification_url')->nullable();
+        $table->text('notes')->nullable();
+        $table->timestamps();
 
-            $table->foreignId('course_id')
-                ->constrained('courses')
-                ->onDelete('cascade');
+        $table->unique(['user_id', 'course_id']);
+    });
 
-            $table->foreignId('course_progress_id')
-                ->nullable()
-                ->constrained('course_progress') // <-- The culprit
-                ->onDelete('set null');
-
-            $table->string('certificate_code', 50)->unique(); // e.g. CERT-LAR-2025-0042
-            $table->timestamp('issued_at')->useCurrent();
-
-            $table->string('pdf_path')->nullable();           // path to generated PDF certificate
-            $table->string('verification_url')->nullable();   // public link to verify certificate
-
-            $table->text('notes')->nullable();                // admin notes if needed
-
-            $table->timestamps();
-
-            // Prevent duplicate certificates per student per course
-            $table->unique(['user_id', 'course_id']);
-        });
+    Schema::table('certificates', function (Blueprint $table) {
+        $table->foreign('course_progress_id')
+            ->references('id')->on('course_progress')
+            ->onDelete('set null');
+    });
     }
 
     public function down(): void
