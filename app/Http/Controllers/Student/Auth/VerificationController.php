@@ -3,93 +3,98 @@
 namespace App\Http\Controllers\Student\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 use App\Mail\OTPMail;
-use Carbon\Carbon;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
 
 class VerificationController extends Controller
 {
     /**
-     * Show the OTP input form.
+     * Show OTP verification form.
      */
-    public function showVerifyForm($email)
+    public function showVerifyForm()
     {
-        return view('auth.verify_otp', ['email' => $email]);
+        return view('auth.verify_otp');
     }
 
     /**
-     * Handle the OTP submission.
+     * Verify the OTP.
      */
     public function verify(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
-            'otp'   => 'required|numeric|digits:6',
+            'otp' => ['required', 'string', 'size:6'],
         ]);
 
-        // Find the user by email
-        $user = User::where('email', $request->email)->first();
+        $email = session('register_email');
 
-        if (!$user) {
-            return back()->withErrors(['email' => 'User not found.']);
+        if (!$email) {
+            return redirect()->route('student.register')
+                ->withErrors(['otp' => 'Session expired. Please register again.']);
         }
 
-        // Check if OTP has expired (10 minutes validity)
-        if ($user->otp_expires_at && Carbon::parse($user->otp_expires_at)->isPast()) {
+        $user = User::where('email', $email)->first();
+
+        if (!$user) {
+            return redirect()->route('student.register')
+                ->withErrors(['otp' => 'User not found. Please register again.']);
+        }
+
+        if ($user->otp !== $request->otp) {
+            return back()->withErrors(['otp' => 'Invalid OTP. Please try again.']);
+        }
+
+        if ($user->otp_expires_at->isPast()) {
             return back()->withErrors(['otp' => 'OTP has expired. Please request a new one.']);
         }
 
-        // Check if OTP matches
-        if ($user->otp == $request->otp) {
-            $user->is_verified = true;
-            $user->email_verified_at = now();
-            $user->otp = null;
-            $user->otp_expires_at = null;
-            $user->save();
+        // Mark email as verified
+        $user->update([
+            'email_verified_at' => now(),
+            'otp' => null,
+            'otp_expires_at' => null,
+        ]);
 
-            // Log the student in automatically using the student guard
-            Auth::guard('student')->login($user);
+        // Clear session
+        Session::forget('register_email');
 
-            return redirect()->route('student.dashboard')
-                             ->with('success', 'Email verified successfully! Welcome aboard.');
-        }
-
-        // Return back with error if OTP is wrong
-        return back()->withErrors(['otp' => 'Invalid OTP code. Please try again.']);
+        // Redirect to login page
+        return redirect()->route('student.login')
+            ->with('success', 'Email verified successfully! Please login to access your dashboard.');
     }
 
     /**
-     * Handle OTP Resending.
+     * Resend OTP.
      */
-    public function resendOtp(Request $request)
+    public function resend(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-        ]);
+        $email = session('register_email');
 
-        $user = User::where('email', $request->email)->first();
+        if (!$email) {
+            return back()->withErrors(['otp' => 'Session expired. Please register again.']);
+        }
+
+        $user = User::where('email', $email)->first();
 
         if (!$user) {
-            return back()->withErrors(['email' => 'User not found.']);
+            return back()->withErrors(['otp' => 'User not found. Please register again.']);
         }
 
-        if ($user->is_verified) {
-            return redirect()->route('student.login')
-                             ->with('info', 'Email is already verified. Please login.');
-        }
+        // Generate new OTP
+        $otp = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
+        $otpExpiresAt = now()->addMinutes(10);
 
-        // Generate new OTP with expiry
-        $otp = rand(100000, 999999);
-        $user->otp = $otp;
-        $user->otp_expires_at = Carbon::now()->addMinutes(10);
-        $user->save();
+        // Update user with new OTP
+        $user->update([
+            'otp' => $otp,
+            'otp_expires_at' => $otpExpiresAt,
+        ]);
 
-        // Send OTP email
+        // Send new OTP email
         Mail::to($user->email)->send(new OTPMail($otp));
 
-        return back()->with('success', 'A new OTP has been sent to your email.');
+        return back()->with('status', 'New OTP has been sent to your email.');
     }
 }

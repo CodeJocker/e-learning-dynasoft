@@ -110,7 +110,7 @@
                 id="password_confirmation" 
                 name="password_confirmation" 
                 placeholder="Confirm your password"
-                class="w-full px-4 py-3 rounded-xl bg-zinc-950 border border-zinc-700 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                class="w-full px-4 py-3 rounded-xl bg-zinc-950 border border-zinc-700 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
             >
         </div>
 

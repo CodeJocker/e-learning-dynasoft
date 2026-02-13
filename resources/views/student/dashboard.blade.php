@@ -1,69 +1,78 @@
-@extends('layouts.student')
+@extends('components.layout.sidebar')
+
+@section('title', 'Dashboard')
 
 @section('content')
-<div class="space-y-6">
-    <!-- Welcome Section -->
-    <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg p-8 text-white">
-        <h1 class="text-4xl font-bold mb-2">Welcome, {{ auth()->user()->name }}!</h1>
-        <p class="text-indigo-100">Your learning journey starts here</p>
+<div class="p-6">
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-white">Welcome, {{ Auth::user()->name }}!</h1>
+        <p class="text-gray-400 mt-2">Here's what's happening with your learning journey.</p>
     </div>
 
-    <!-- Stats -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-white rounded-lg shadow p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-gray-600 text-sm">Enrolled Courses</p>
-                    <p class="text-3xl font-bold text-gray-900">{{ $enrolledCourses }}</p>
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-zinc-900/80 border border-zinc-700 rounded-xl p-6">
+            <div class="flex items-center gap-4">
+                <div class="p-3 bg-green-600/20 rounded-lg">
+                    @svg('heroicon-o-book-open', 'w-6 h-6 text-green-400')
                 </div>
-                <div class="bg-indigo-100 p-4 rounded-full">
-                    <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C6.5 6.253 2 10.998 2 17s4.5 10.747 10 10.747c5.5 0 10-4.998 10-10.747S17.5 6.253 12 6.253z"></path>
-                    </svg>
+                <div>
+                    <p class="text-gray-400 text-sm">Enrolled Courses</p>
+                    <p class="text-2xl font-bold text-white">0</p>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white rounded-lg shadow p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-gray-600 text-sm">Overall Progress</p>
-                    <p class="text-3xl font-bold text-gray-900">{{ $progress }}%</p>
+        <div class="bg-zinc-900/80 border border-zinc-700 rounded-xl p-6">
+            <div class="flex items-center gap-4">
+                <div class="p-3 bg-blue-600/20 rounded-lg">
+                    @svg('heroicon-o-clock', 'w-6 h-6 text-blue-400')
                 </div>
-                <div class="bg-green-100 p-4 rounded-full">
-                    <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
+                <div>
+                    <p class="text-gray-400 text-sm">Hours Learned</p>
+                    <p class="text-2xl font-bold text-white">0</p>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white rounded-lg shadow p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-gray-600 text-sm">Profile Completion</p>
-                    <p class="text-3xl font-bold text-gray-900">85%</p>
+        <div class="bg-zinc-900/80 border border-zinc-700 rounded-xl p-6">
+            <div class="flex items-center gap-4">
+                <div class="p-3 bg-purple-600/20 rounded-lg">
+                    @svg('heroicon-o-trophy', 'w-6 h-6 text-purple-400')
                 </div>
-                <div class="bg-purple-100 p-4 rounded-full">
-                    <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                    </svg>
+                <div>
+                    <p class="text-gray-400 text-sm">Certificates</p>
+                    <p class="text-2xl font-bold text-white">0</p>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Quick Actions -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <a href="{{ route('student.profile.edit') }}" class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition">
-            <h3 class="font-bold text-lg mb-2">Complete Your Profile</h3>
-            <p class="text-gray-600 text-sm">Add a profile photo, bio, and skills to get started</p>
-        </a>
+    <div class="bg-zinc-900/80 border border-zinc-700 rounded-xl p-6">
+        <h2 class="text-xl font-bold text-white mb-4">Quick Actions</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <a href="#" class="flex items-center gap-3 p-4 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition-colors">
+                <div class="p-2 bg-green-600/20 rounded-lg">
+                    @svg('heroicon-o-plus', 'w-5 h-5 text-green-400')
+                </div>
+                <span class="text-gray-200">Browse Courses</span>
+            </a>
 
-        <a href="#" class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition">
-            <h3 class="font-bold text-lg mb-2">Browse Courses</h3>
-            <p class="text-gray-600 text-sm">Explore and enroll in new courses</p>
-        </a>
+            <a href="#" class="flex items-center gap-3 p-4 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition-colors">
+                <div class="p-2 bg-blue-600/20 rounded-lg">
+                    @svg('heroicon-o-play', 'w-5 h-5 text-blue-400')
+                </div>
+                <span class="text-gray-200">Continue Learning</span>
+            </a>
+
+            <a href="#" class="flex items-center gap-3 p-4 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition-colors">
+                <div class="p-2 bg-purple-600/20 rounded-lg">
+                    @svg('heroicon-o-chart-bar', 'w-5 h-5 text-purple-400')
+                </div>
+                <span class="text-gray-200">View Progress</span>
+            </a>
+        </div>
     </div>
 </div>
 @endsection

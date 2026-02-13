@@ -12,15 +12,20 @@ class OTPMail extends Mailable
 
     public $otp;
 
-    public function __construct($otp)
+    /**
+     * Create a new message instance.
+     */
+    public function __construct(string $otp)
     {
         $this->otp = $otp;
     }
 
+    /**
+     * Build the message.
+     */
     public function build()
     {
-        return $this->subject('Your Student Verification Code')
-                    ->view('Email.OTP')
-                    ->with(['otp' => $this->otp]);
+        return $this->subject('Your OTP for Email Verification')
+                    ->view('emails.otp');
     }
 }

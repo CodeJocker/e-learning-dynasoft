@@ -1,28 +1,63 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Student\Auth;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
-    public function sendOtp(Request $request)
+    /**
+     * Show login form.
+     */
+    public function showLoginForm()
     {
-        $user = User::where('email', $request->email)->first();
+        return view('auth.login');
+    }
 
-        if (!$user) return back()->with('error', 'Email not found');
+    /**
+     * Handle login attempt.
+     */
+    public function login(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
 
-        $otp = rand(100000, 999999);
-        $user->update(['otp' => $otp]);
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
 
-        Mail::raw("Your OTP is: $otp", function ($m) use ($user) {
-            $m->to($user->email)->subject('Email Verification');
-        });
+            Session::flash('success', 'Welcome back!');
 
-        return back()->with('success', 'OTP sent');
+            return redirect()->route('student.dashboard');
+        }
+
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ])->onlyInput('email');
+    }
+
+    /**
+     * Show student dashboard.
+     */
+    public function dashboard()
+    {
+        return view('student.dashboard');
+    }
+
+    /**
+     * Logout the user.
+     */
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/');
     }
 }
-
-?>

@@ -3,21 +3,26 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Http\Request;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\URL;
 use Symfony\Component\HttpFoundation\Response;
 
 class EnsureEmailIsVerified
 {
-    public function handle(Request $request, Closure $next): Response
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     */
+    public function handle($request, Closure $next, $redirectToRoute = null): Response
     {
-        $user = auth('student')->user();
-
-        // If user is not verified, redirect to verification notice
-        if ($user && !$user->is_verified) {
-            $email = $user->email;
-            auth('student')->logout();
-            return redirect()->route('student.showVerifyForm', ['email' => $email])
-                             ->with('error', 'Please verify your email first.');
+        if (! $request->user() ||
+            ($request->user() instanceof MustVerifyEmail &&
+            ! $request->user()->hasVerifiedEmail())) {
+            return $request->expectsJson()
+                ? abort(403, 'Your email address is not verified.')
+                : Redirect::route($redirectToRoute ?: 'verification.notice');
         }
 
         return $next($request);
