@@ -33,6 +33,7 @@ class RegisterController extends Controller
             'name' => $request->name,
             'username' => $request->name,
             'email' => $request->email,
+            'otp' => $otp,
             'password' => Hash::make($request->password),
             'is_verified' => false,
             'role' => 'student',
@@ -53,8 +54,9 @@ class RegisterController extends Controller
             \Log::error('OTP Mail Error: ' . $e->getMessage());
         }
 
-        return redirect()->route('student.otp.verify', ['email' => $user->email])
-                         ->with('success', 'Account created! OTP sent to your email.');
+        // Change 'otp.submit' to 'showVerifyForm'
+        return redirect()->route('student.showVerifyForm', ['email' => $user->email])
+                        ->with('success', 'Account created! OTP sent to your email.');
     }
 }
 
