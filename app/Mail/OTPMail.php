@@ -20,7 +20,7 @@ class OTPMail extends Mailable
     public function build()
     {
         return $this->subject('Your Student Verification Code')
-                    ->view('Email.OTP')
+                    ->view('auth.otp')
                     ->with(['otp' => $this->otp]);
     }
 }

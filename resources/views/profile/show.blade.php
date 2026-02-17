@@ -25,7 +25,7 @@
                 <p class="text-gray-600">{{ $user->email }}</p>
 
                 @if(auth()->user()->id === $user->id)
-                    <a href="{{ route('student.profile.edit') }}" class="mt-4 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">Edit Profile</a>
+                    <a href="{{ route('profile.edit') }}" class="mt-4 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">Edit Profile</a>
                 @endif
             </div>
 

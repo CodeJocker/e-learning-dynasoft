@@ -10,12 +10,12 @@ class RoleMiddleware
 {
     /**
      * Handle an incoming request.
-     * Usage in routes: ->middleware('role:instructor')
+     * Usage: ->middleware('role:instructor')
      */
     public function handle(Request $request, Closure $next, string $role)
     {
         if (!Auth::check()) {
-            return redirect()->route('admin.login')->with('error', 'Please login.');
+            return redirect()->route('login')->with('error', 'Please login.');
         }
 
         if (Auth::user()->role !== $role) {

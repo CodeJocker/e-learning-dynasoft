@@ -3,12 +3,8 @@
 @section('title', 'Welcome Back')
 
 @section('form')
-<div class="mb-8">
-    <h2 class="text-2xl font-bold text-white text-center">Student Login</h2>
-    <p class="text-zinc-400 text-center text-sm mt-2">Access your courses and continue learning</p>
-</div>
 
-<form action="{{ route('student.login.submit') }}" method="POST" class="space-y-5">
+<form action="{{ route('login.submit') }}" method="POST" class="space-y-5">
     @csrf
 
     <div>
@@ -55,7 +51,7 @@
 @section('footer')
 <p class="text-zinc-500 text-sm">
     New to the platform? 
-    <a href="{{ route('student.register') }}" class="text-emerald-500 font-semibold hover:text-emerald-400 transition underline-offset-4 hover:underline">
+    <a href="{{ route('register') }}" class="text-emerald-500 font-semibold hover:text-emerald-400 transition underline-offset-4 hover:underline">
         Create an account
     </a>
 </p>

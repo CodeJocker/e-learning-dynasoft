@@ -55,7 +55,7 @@
 
     <!-- Quick Actions -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <a href="{{ route('student.profile.edit') }}" class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition">
+        <a href="{{ route('profile.edit') }}" class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition">
             <h3 class="font-bold text-lg mb-2">Complete Your Profile</h3>
             <p class="text-gray-600 text-sm">Add a profile photo, bio, and skills to get started</p>
         </a>

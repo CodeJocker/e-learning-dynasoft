@@ -5,7 +5,7 @@
     <div class="bg-white rounded-lg shadow p-8">
         <h2 class="text-2xl font-bold mb-6">Edit Your Profile</h2>
 
-        <form action="{{ route('student.profile.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+        <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
             @method('PUT')
 
@@ -62,7 +62,7 @@
             <!-- Buttons -->
             <div class="flex space-x-4 pt-4 border-t">
                 <button type="submit" class="flex-1 bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700 transition">Save Changes</button>
-                <a href="{{ route('student.dashboard') }}" class="flex-1 bg-gray-200 text-gray-800 py-2 rounded-lg font-semibold hover:bg-gray-300 transition text-center">Cancel</a>
+                <a href="{{ route('dashboard') }}" class="flex-1 bg-gray-200 text-gray-800 py-2 rounded-lg font-semibold hover:bg-gray-300 transition text-center">Cancel</a>
             </div>
         </form>
     </div>

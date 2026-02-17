@@ -1,26 +1,29 @@
 <?php
 
-namespace App\Http\Controllers\Student\Profile;
+namespace App\Http\Controllers\Auth;
 
-use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Http\Request;
+
+use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
+
 class ProfileController extends Controller
 {
+    //
     public function show(User $user)
     {
         Gate::authorize('view', $user);
-        return view('student.profile.show', ['user' => $user]);
+        return view('profile.show', ['user' => $user]);
     }
 
     public function edit()
     {
         $user = Auth::user();
-        return view('student.profile.edit', ['user' => $user]);
+        return view('profile.edit', ['user' => $user]);
     }
 
     public function update(Request $request)
@@ -59,6 +62,6 @@ class ProfileController extends Controller
             'privacy_setting' => $validated['privacy_setting'],
         ]);
 
-        return redirect()->route('student.profile.show', $user)->with('success', 'Profile updated successfully');
+        return redirect()->route('profile.show', $user)->with('success', 'Profile updated successfully');
     }
 }

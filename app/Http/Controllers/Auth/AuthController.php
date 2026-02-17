@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Student\Auth;
+namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
 
-class RegisterController extends Controller
+
+class AuthController extends Controller
 {
     public function showRegistrationForm()
     {
@@ -50,13 +51,10 @@ class RegisterController extends Controller
         try {
             Mail::to($user->email)->send(new OTPMail($otp));
         } catch (\Exception $e) {
-            // Log mail error but don't fail registration
             \Log::error('OTP Mail Error: ' . $e->getMessage());
         }
 
-        // Change 'otp.submit' to 'showVerifyForm'
         return redirect()->route('student.showVerifyForm', ['email' => $user->email])
                         ->with('success', 'Account created! OTP sent to your email.');
     }
 }
-

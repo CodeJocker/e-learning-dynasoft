@@ -8,7 +8,7 @@
     <p class="text-zinc-400 text-sm mt-2">Start your learning journey with us today</p>
 </div>
 
-<form action="{{ route('student.register.submit') }}" method="POST" class="space-y-5">
+<form action="{{ route('register.submit') }}" method="POST" class="space-y-5">
     @csrf
 
     <div>
@@ -76,7 +76,7 @@
 @section('footer')
 <p class="text-zinc-500 text-sm">
     Already a student? 
-    <a href="{{ route('student.login') }}" class="text-emerald-500 font-semibold hover:text-emerald-400 transition underline-offset-4 hover:underline">
+    <a href="{{ route('login') }}" class="text-emerald-500 font-semibold hover:text-emerald-400 transition underline-offset-4 hover:underline">
         Sign in here
     </a>
 </p>

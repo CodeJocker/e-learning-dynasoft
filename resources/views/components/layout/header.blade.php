@@ -70,23 +70,7 @@ x-data="{
         <div class="h-8 w-px bg-subtle mx-1 sm:mx-2 border-r border-subtle"></div>
 
         <!-- Profile Dropdown -->
-        <!-- Profile Dropdown -->
         <div class="relative" x-data="{ profileOpen: false }" @click.outside="profileOpen = false">
-            <button @click="profileOpen = !profileOpen" class="flex items-center gap-3 focus:outline-none group">
-                <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-tr from-accent to-accent-secondary p-[2px] transition-transform group-hover:scale-105">
-                    <div class="w-full h-full rounded-full surface-card p-[2px]">
-                         <img src="https://ui-avatars.com/api/?name={{ session('mock_role', 'Admin+User') }}&background=0D8ABC&color=fff" alt="User" class="w-full h-full rounded-full object-cover">
-                    </div>
-                </div>
-                <div class="hidden md:block text-left">
-                    <p class="text-sm font-semibold text-primary group-hover:text-accent transition-colors">{{ ucfirst(session('mock_role', 'Admin User')) }}</p>
-                    <p class="text-xs text-secondary">Administrator</p>
-                </div>
-                <div class="hidden md:block text-secondary group-hover:text-primary transition-colors">
-                    @svg('heroicon-m-chevron-down', 'w-4 h-4')
-                </div>
-            </button>
-
             <!-- Dropdown Menu -->
             <div 
                 x-show="profileOpen"
@@ -184,7 +168,7 @@ x-data="{
         @endauth
 
         <!-- LOGOUT -->
-        <form method="POST" action="{{ route('admin.logout') }}">
+        <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button type="submit"
                 class="group relative flex items-center justify-center

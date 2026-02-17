@@ -11,13 +11,16 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-$middleware->redirectTo(
-        guests: '/admin/login' // This replaces the search for the 'login' route
-    );
-            $middleware->alias([
+        $middleware->redirectTo(
+            guests: '/login' // Changed from /admin/login to /login to match your new global route
+        );
+
+        $middleware->alias([
+            'role' => \App\Http\Middleware\RoleMiddleware::class, // ADD THIS LINE
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
             'student' => \App\Http\Middleware\StudentMiddleware::class,
             'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
+            'authorize' => \App\Http\Middleware\AuthorizeAccess::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
